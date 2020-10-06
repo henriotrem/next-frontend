@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-xs-12">
+    <button class="btn btn-default" (click)="onBack(universe)">Back</button>
+    <h3>Universe - #{{ universe.key }}</h3>
+    <p><b>Description : </b>{{ universe.description }}</p>
+    <ul>
+      <li *ngFor="let dimension of universe.dimensions">
+        <b>{{ dimension.key }}</b>
+        [ Root : {{ dimension.base.root }} | Bit : {{ dimension.base.bit }} | Alphabet : {{ dimension.base.alphabet }} ]
+      </li>
+    </ul>
+    <p><b>Precision : </b>{{ universe.precision }}</p>
+    <p><b>Limit per list : </b>{{ universe.limit }}</p>
+  </div>
+</div>

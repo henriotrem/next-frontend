@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-xs-12">
+    <button class="btn btn-primary pull-right" (click)="onNewFile()">Create</button>
+    <h2>Files</h2>
+    <div class="list-group">
+      <button class="list-group-item" style="margin-bottom: 10px" *ngFor="let file of files" (click)="onViewFile(file)">
+        <h4 class="list-group-item-heading">
+          {{ file.name }}
+        </h4>
+        <h5 class="list-group-item-text">
+          {{ file.total }}
+        </h5>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <h2>Create your #universe!</h2>
+    <form [formGroup]="universeForm" (ngSubmit)="onSaveUniverse()">
+      <div class="form-group">
+        <label for="key">Key</label>
+        <input type="text" class="form-control" id="key" formControlName="key">
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" id="description" formControlName="description">
+      </div>
+      <div formArrayName="dimensions">
+        <label>Dimensions</label>
+        <div class="from-group list-group-item" *ngFor="let dimensionControl of getDimensions().controls;let i = index" [formGroupName]="i">
+
+          <div class="form-inline">
+            <label>Key :</label>
+            <select id="status" class="form-control" style="margin: 5px" formControlName="key">
+              <option value="geospatiality">geospatiality</option>
+              <option value="temporality">temporality</option>
+            </select>
+          </div>
+
+          <div formGroupName="base" class="form-inline">
+
+            <label>Root :</label>
+            <input type="text" class="form-control" style="margin: 5px" formControlName="root">
+
+            <label> Bit :</label>
+            <input type="number" class="form-control" style="margin: 5px" formControlName="bit">
+
+            <label> Alphabet :</label>
+            <input type="text" class="form-control" style="margin: 5px" formControlName="alphabet">
+
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" style="margin-top: 5px" (click)="onAddDimension()">+</button>
+      </div>
+      <div class="form-group">
+        <label for="precision">Precision</label>
+        <input type="number" class="form-control" id="precision" formControlName="precision">
+      </div>
+      <div class="form-group">
+        <label for="limit">Limit</label>
+        <input type="number" class="form-control" id="limit" formControlName="limit">
+      </div>
+      <button class="btn btn-success" type="submit" [disabled]="universeForm.invalid">Save</button>
+
+      <button class="btn btn-default pull-right" (click)="onBack()">Back</button>
+    </form>
+  </div>
+</div>

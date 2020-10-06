@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <button class="btn btn-default" (click)="onBack()">Back</button>
+    <h2>Post your photo</h2>
+    <form [formGroup]="photoForm" (ngSubmit)="onSavePhoto()">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" formControlName="title">
+      </div>
+      <div class="form-group">
+        <label for="author">Author</label>
+        <input type="text" class="form-control" id="author" formControlName="author">
+      </div>
+      <div formArrayName="geospatiality">
+        <div class="from-group">
+          <label>Latitude</label>
+          <input type="number" class="form-control" formControlName="0">
+        </div>
+        <div class="from-group">
+          <label>Longitude</label>
+          <input type="number" class="form-control" formControlName="1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="temporality">Time</label>
+        <input type="number" class="form-control" id="temporality" formControlName="temporality">
+      </div>
+      <div class="form-group">
+        <label for="imageUrl">Image URL</label>
+        <input type="string" class="form-control" id="imageUrl" formControlName="imageUrl">
+      </div>
+      <div formArrayName="universes">
+        <h3>#universes</h3>
+        <div class="from-group" *ngFor="let universeControl of getUniverses().controls; let i = index">
+          <input type="text" class="form-control" [formControlName]="i">
+        </div>
+        <button type="button" class="btn btn-success" (click)="onAddUniverse()">+</button>
+      </div>
+      <div class="form-group">
+        <label for="generate">Generate</label>
+        <input type="text" class="form-control" id="generate" formControlName="generate">
+      </div>
+      <button class="btn btn-success" type="submit" [disabled]="photoForm.invalid">Save</button>
+    </form>
+  </div>
+</div>

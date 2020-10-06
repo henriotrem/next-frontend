@@ -1,0 +1,29 @@
+<div class="navbar navbar-default">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav">
+      <li routerLinkActive="active">
+        <a routerLink="universes">Home</a>
+      </li>
+      <li routerLinkActive="active">
+        <a routerLink="photos">Photos</a>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li routerLinkActive="active" *ngIf="!isAuth">
+        <a routerLink="auth/signup">Sign up</a>
+      </li>
+      <li routerLinkActive="active" *ngIf="!isAuth">
+        <a routerLink="auth/login">Login</a>
+      </li>
+      <li routerLinkActive="active" *ngIf="isAuth">
+        <a routerLink="services">Services</a>
+      </li>
+      <li routerLinkActive="active" *ngIf="isAuth">
+        <a routerLink="files">Files</a>
+      </li>
+      <li routerLinkActive="active" *ngIf="isAuth">
+        <a style="cursor:pointer" (click)="onLogOut()">Log out</a>
+      </li>
+    </ul>
+  </div>
+</div>
