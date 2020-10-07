@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ConstantsService{
-  readonly baseAppUrl: string = 'http://127.0.0.1:3000';//'http://172.20.10.3:3000';
+  readonly baseAppUrl: string = 'http://jakeri.com:3000';//'http://172.20.10.3:3000';
   readonly mapOptions = {
     panControl: false,
     zoomControl: false,

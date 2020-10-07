@@ -3,6 +3,7 @@ import {WindowService} from "../../services/window.service";
 import {AuthService} from "../../services/auth.service";
 import {ServicesService} from "../../services/services.service";
 import {Router} from "@angular/router";
+import {ConstantsService} from "../../services/constants.service";
 
 @Component({
   selector: 'app-service-form',
@@ -13,14 +14,14 @@ export class ServiceFormComponent implements OnInit {
 
   nativeWindow: any;
 
-  constructor(private windowService: WindowService, private authService: AuthService, private router: Router) { }
+  constructor(private windowService: WindowService, private constantsService: ConstantsService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.nativeWindow = this.windowService.getNativeWindow();
   }
 
   onNewGoogle(): void {
-    this.nativeWindow.open('http://127.0.0.1:3000/api/external/google?userId=' + this.authService.userId);
+    this.nativeWindow.open(this.constantsService.baseAppUrl + '/api/external/google?userId=' + this.authService.userId);
     this.router.navigate(['/']);
   }
 
