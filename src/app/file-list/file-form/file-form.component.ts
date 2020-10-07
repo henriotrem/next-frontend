@@ -5,11 +5,8 @@ import {Position} from "../../models/Position.model";
 import {AuthService} from "../../services/auth.service";
 import {File} from "../../models/File.model";
 import {FilesService} from "../../services/files.service";
-import {SegmentsService} from "../../services/segments.service";
-import {GoogleMap} from "@angular/google-maps";
 import {ConstantsService} from "../../services/constants.service";
-import {Segment} from "../../models/Segment.model";
-import {Subscription} from "rxjs";
+import {async} from "@angular/core/testing";
 
 
 @Component({
@@ -25,6 +22,7 @@ export class FileFormComponent implements OnInit {
   chunk = 100;
   creation = false;
   stop = true;
+  positions = [];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -95,9 +93,9 @@ export class FileFormComponent implements OnInit {
 
   uploadPositions(): void {
 
-    let lastOffset = this.file.processed;
+    this.positions = [];
 
-    for(let i = lastOffset; i < (lastOffset + this.chunk) && i < this.locations.length; i++) {
+    for(let i = this.file.processed; i < (this.file.processed + this.chunk) && i < this.locations.length; i++) {
 
       let location = this.locations[i];
 
@@ -110,22 +108,38 @@ export class FileFormComponent implements OnInit {
       let temporality = location.timestampMs / 1000;
       let position = new Position(this.authService.userId, geospatiality, temporality);
 
-      this.positionsService.addPosition(position).then(this.checkFile(lastOffset)).catch(this.checkFile(lastOffset));
+      this.positions.push(position);
+    }
+
+    if(this.positions.length > 0) {
+
+      this.file.processed += this.positions.length;
+      (async () => {
+
+        try {
+
+          await this.positionsService.addPositions(this.positions);
+          this.checkFile();
+        } catch(e) {
+
+        }
+      })();
+    } else {
+
+      this.stop = true;
+      this.disabled = false;
     }
   }
 
-  checkFile(lastOffset): void {
+  checkFile(): void {
 
-    if(++this.file.processed === (lastOffset  + this.chunk)) {
+    //this.filesService.updateFile(this.file);
 
-      this.filesService.updateFile(this.file);
-
-      if(this.stop) {
-        this.disabled = false;
-        this.stop = false;
-      } else {
-        this.uploadPositions();
-      }
+    if(this.stop) {
+      this.disabled = false;
+      this.stop = false;
+    } else {
+      this.uploadPositions();
     }
   }
 
@@ -136,4 +150,9 @@ export class FileFormComponent implements OnInit {
   onBack(): void {
     this.router.navigate(['/files']);
   }
+
+}
+
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
 }

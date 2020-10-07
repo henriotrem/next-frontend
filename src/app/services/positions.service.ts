@@ -24,9 +24,9 @@ export class PositionsService {
     this.positionsSubject.next(this.positions);
   }
 
-  addPosition(position: Position): any {
+  addPositions(positions: Position[]): any {
     return new Promise((resolve, reject) => {
-      this.http.post( this.constantsService.baseAppUrl + '/api/positions/', position).subscribe(
+      this.http.post( this.constantsService.baseAppUrl + '/api/positions/', {positions: positions}).subscribe(
         (response) => {
           resolve(response);
         },
