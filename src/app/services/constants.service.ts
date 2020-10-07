@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class ConstantsService{
-  readonly baseAppUrl: string = 'http://jakeri.com:3000';//'http://172.20.10.3:3000';
+  readonly baseAppUrl: string = environment.apiUrl;//'http://172.20.10.3:3000';
   readonly mapOptions = {
     panControl: false,
     zoomControl: false,
