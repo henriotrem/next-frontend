@@ -19,7 +19,7 @@ export class FileFormComponent implements OnInit {
   file: File;
   locations = null;
   disabled = true;
-  chunk = 100;
+  chunk = 1000;
   creation = false;
   stop = true;
   positions = [];
