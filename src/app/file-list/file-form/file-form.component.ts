@@ -19,7 +19,7 @@ export class FileFormComponent implements OnInit {
   file: File;
   locations = null;
   disabled = true;
-  chunk = 1000;
+  chunk = 200;
   creation = false;
   stop = true;
   positions = [];
@@ -133,7 +133,7 @@ export class FileFormComponent implements OnInit {
 
   checkFile(): void {
 
-    //this.filesService.updateFile(this.file);
+    this.filesService.updateFile(this.file);
 
     if(this.stop) {
       this.disabled = false;
