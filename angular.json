@@ -102,6 +102,9 @@
           "configurations": {
             "production": {
               "browserTarget": "frontend:build:production"
+            },
+            "staging": {
+              "browserTarget": "frontend:build:production"
             }
           }
         },
