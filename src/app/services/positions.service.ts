@@ -1,107 +1,76 @@
 import { Injectable } from '@angular/core';
-import {Position} from '../models/Position.model';
-import {Subject} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import {UniversesService} from "./universes.service";
-import {ConstantsService} from "./constants.service";
-import {AuthService} from "./auth.service";
-import {min} from "rxjs/operators";
+import { ConstantsService } from './constants.service';
+import { ItemsService } from './items.service';
+import { Position } from '../models/Position.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PositionsService {
+export class PositionsService extends ItemsService {
 
-  positions: Position[] = [];
-  positionsSubject = new Subject<Position[]>();
-
-  constructor(private universesService: UniversesService,
-              private constantsService: ConstantsService,
-              private authService: AuthService,
-              private http: HttpClient) {}
-
-  emitPositions(): void {
-    this.positionsSubject.next(this.positions);
+  constructor(private constantsService: ConstantsService,
+              private http: HttpClient) {
+    super();
   }
 
   addPositions(positions: Position[]): any {
-    return new Promise((resolve, reject) => {
-      this.http.post( this.constantsService.baseAppUrl + '/api/positions/', {positions: positions}).subscribe(
-        (response) => {
-          resolve(response);
-        },
-        (error) => {
-          reject(error);
-        }
-      );
-    });
+    return this.http.post(this.constantsService.baseAppUrl + '/api/positions?_response=partial', {positions});
   }
 
-  getAllPositions(): void {
-    this.http.get(this.constantsService.baseAppUrl + '/api/positions/').subscribe(
-      (positions: Position[]) => {
-
-        if (positions) {
-          this.positions = positions;
-          this.emitPositions();
-        }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+  updatePosition(position: Position): any {
+    return this.http.put(this.constantsService.baseAppUrl + '/api/positions/' + position._id, position);
   }
 
-  getPositions(ids: string): any {
-    return new Promise((resolve, reject) => {
-      this.http.get(this.constantsService.baseAppUrl + '/api/positions/' + ids).subscribe(
-        (response) => {
-          resolve(response);
-        },
-        (error) => {
-          reject(error);
-        }
-      );
-    });
+  patchPosition(position: Position, set: any): any {
+    return this.http.delete(this.constantsService.baseAppUrl + '/api/positions/' + position._id, set);
   }
 
-  removePosition(position: Position): any {
-    return new Promise((resolve, reject) => {
-      this.http.delete(this.constantsService.baseAppUrl + '/api/positions/' + position._id).subscribe(
-        (response) => {
-          resolve(response);
-        },
-        (error) => {
-          reject(error);
-        }
-      );
-    });
+  patchPositions(params: any, set: any): any {
+    return this.http.patch(this.constantsService.baseAppUrl + '/api/positions'
+      + this.constantsService.formatQuery(params), set);
   }
 
-  updatePositionsSegmentId(segmentId: string, minTimestamp: number, maxTimestamp: number): any {
+  deletePosition(position: Position): any {
+    return this.http.delete(this.constantsService.baseAppUrl + '/api/positions/' + position._id);
+  }
 
-    let body = {
-      userId: this.authService.userId,
-      filter: {
-        temporality: {
-          "$gte": minTimestamp,
-          "$lt": maxTimestamp
-        }
-      } ,
-      setter: {
-        segmentId: segmentId
-      }
+  deletePositions(params: any): any {
+    return this.http.delete(this.constantsService.baseAppUrl + '/api/positions'
+      + this.constantsService.formatQuery(params));
+  }
+
+  getPositions(params: any): any {
+    return this.http.get(this.constantsService.baseAppUrl + '/api/positions'
+      + this.constantsService.formatQuery(params));
+  }
+
+  countPositions(params: any): any {
+    return this.http.head(this.constantsService.baseAppUrl + '/api/positions'
+      + this.constantsService.formatQuery(params));
+  }
+
+  uploadItems(items: any[]): any {
+    return this.addPositions(items);
+  }
+
+  getItems(params: any): any {
+    return this.getPositions(params);
+  }
+
+  fileToArray(file: any): any {
+    return file.locations;
+  }
+
+  objectToItem(obj: any): any {
+    const geospatiality = {
+      latitude: obj.latitudeE7 / 10000000,
+      longitude: obj.longitudeE7 / 10000000,
+      accuracy: obj.accuracy
     };
 
-    return new Promise((resolve, reject) => {
-      this.http.put( this.constantsService.baseAppUrl + '/api/positions', body).subscribe(
-        (response) => {
-          resolve(response);
-        },
-        (error) => {
-          reject(error);
-        }
-      );
-    });
+    const temporality = obj.timestampMs / 1000;
+
+    return new Position('', geospatiality, temporality);
   }
 }

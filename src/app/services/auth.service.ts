@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import {ConstantsService} from "./constants.service";
+import {ConstantsService} from './constants.service';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,58 +11,65 @@ import {ConstantsService} from "./constants.service";
 export class AuthService {
 
   isAuth$ = new BehaviorSubject<boolean>(false);
-  token: string;
-  userId: string;
 
-  constructor(private constantsService: ConstantsService, private router: Router,
-              private http: HttpClient) {}
+  constructor(private constantsService: ConstantsService,
+              private router: Router,
+              private http: HttpClient) {
 
-  signUp(email: string, password: string) {
-    return new Promise((resolve, reject) => {
-      this.http.post(
-        this.constantsService.baseAppUrl + '/api/auth/signup',
-        { email: email, password: password })
-        .subscribe(
-          () => {
-            this.logIn(email, password).then(
-              () => {
-                resolve();
-              }
-            ).catch(
-              (error) => {
-                reject(error);
-              }
-            );
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
+    this.isLoggedIn();
   }
 
-  logIn(email: string, password: string) {
-    return new Promise((resolve, reject) => {
-      this.http.post(
-        this.constantsService.baseAppUrl + '/api/auth/login',
-        { email: email, password: password })
-        .subscribe(
-          (authData: { token: string, userId: string }) => {
-            this.token = authData.token;
-            this.userId = authData.userId;
-            this.isAuth$.next(true);
-            resolve();
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
+  getAccount(): any {
+    return this.http.get(this.constantsService.baseAppUrl + '/api/auth/account');
   }
 
-  logOut() {
+  signUp(firstname: string, lastname: string, email: string, password: string): any {
+
+    const account = {
+      firstname,
+      lastname,
+      email,
+      password
+    };
+
+    return this.http.post(this.constantsService.baseAppUrl + '/api/auth/signup', account);
+  }
+
+  logIn(email: string, password: string): any {
+
+    return this.http.post(this.constantsService.baseAppUrl + '/api/auth/login', {email, password});
+  }
+
+  setSession(authResult): void {
+    const expiresAt = moment().add(authResult.expiresIn, 'second');
+
+    localStorage.setItem('id_token', authResult.token);
+    localStorage.setItem('user_id', authResult.userId);
+    localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
+
+    this.isAuth$.next(true);
+  }
+
+  logOut(): void {
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('expires_at');
+
     this.isAuth$.next(false);
-    this.userId = null;
-    this.token = null;
+  }
+
+  isLoggedIn(): void {
+
+    if (!moment().isBefore(this.getExpiration())) {
+      this.logOut();
+    } else {
+      this.isAuth$.next(true);
+    }
+  }
+
+  getExpiration(): any {
+    const expiration = localStorage.getItem('expires_at');
+    const expiresAt = JSON.parse(expiration);
+    return moment(expiresAt);
   }
 }

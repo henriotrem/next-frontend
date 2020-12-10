@@ -1,0 +1,180 @@
+<div class="row">
+  <div class="col">
+    <button class="btn btn-secondary float-right" (click)="onLogOut()">Log Out</button>
+    <h2>Profile</h2>
+    <p>
+      {{ account.firstname }} {{ account.lastname }}
+    </p>
+    <p>
+      {{ account.email }}
+    </p>
+    <h2>Data</h2>
+    <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
+      <li ngbNavItem="locations">
+        <a ngbNavLink routerLink="." fragment="locations">Locations</a>
+        <ng-template ngbNavContent>
+          <div class="row">
+            <div *ngIf="(sources|callback: locationFilter).length == 0">No Data</div>
+            <div *ngFor="let source of sources | callback: locationFilter">
+              <app-source [itemsService]="positionsService" [source]="source" ></app-source>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+      <li ngbNavItem="photos">
+        <a ngbNavLink routerLink="." fragment="photos">Photos</a>
+        <ng-template ngbNavContent>
+          <div class="row">
+            <div *ngIf="(sources|callback: photoFilter).length == 0">No Data</div>
+            <div *ngFor="let source of sources | callback: photoFilter">
+              <app-source [itemsService]="photosService" [source]="source" ></app-source>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+      <li ngbNavItem="musics">
+        <a ngbNavLink routerLink="." fragment="musics">Musics</a>
+        <ng-template ngbNavContent>
+          <div class="row">
+            <div *ngIf="(sources|callback: musicFilter).length == 0">No Data</div>
+            <div *ngFor="let source of sources | callback: musicFilter">
+              <app-source [itemsService]="musicsService" [source]="source" ></app-source>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+      <li ngbNavItem="watches">
+        <a ngbNavLink routerLink="." fragment="watches">Watches</a>
+        <ng-template ngbNavContent>
+          <div class="row">
+            <div *ngIf="(sources|callback: watchFilter).length == 0">No Data</div>
+            <div *ngFor="let source of sources | callback: watchFilter">
+              <app-source [itemsService]="watchesService" [source]="source" ></app-source>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+      <li ngbNavItem="websites">
+        <a ngbNavLink routerLink="." fragment="websites">Websites</a>
+        <ng-template ngbNavContent>
+          <div class="row">
+            <div *ngIf="(sources|callback: websiteFilter).length == 0">No Data</div>
+            <div *ngFor="let source of sources | callback: websiteFilter">
+              <app-source [itemsService]="websitesService" [source]="source" ></app-source>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+      <li ngbNavItem="add" class="ml-auto">
+        <a ngbNavLink routerLink="." fragment="add">Add</a>
+        <ng-template ngbNavContent>
+          <div class="row">
+            <div *ngIf="sourceFilter('Google Maps History')" class="col-auto mb-3">
+              <div class="card" style="width: 21rem;margin-top: 15px">
+                <div class="card-header">
+                  Google Maps History
+                </div>
+                <div class="card-body">
+                  <p>
+                    This is the google maps history template
+                  </p>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-success btn-sm" (click)="onNewGoogleMapsHistory()">
+                    New
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="sourceFilter('Google Places API')" class="col-auto mb-3">
+              <div class="card" style="width: 21rem;margin-top: 15px">
+                <div class="card-header">
+                  Google Places API
+                </div>
+                <div class="card-body">
+                  <p>
+                    This is the google maps history template
+                  </p>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-success btn-sm" (click)="onNewGooglePlacesAPI()">
+                    New
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="sourceFilter('Google Photo API')" class="col-auto mb-3">
+              <div class="card" style="width: 21rem;margin-top: 15px">
+                <div class="card-header">
+                  Google Photo API
+                </div>
+                <div class="card-body">
+                  <p>
+                    This is the google maps history template
+                  </p>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-success btn-sm" (click)="onNewGooglePhotoAPI()">
+                    New
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="sourceFilter('Spotify History')" class="col-auto mb-3">
+              <div class="card" style="width: 21rem;margin-top: 15px">
+                <div class="card-header">
+                  Spotify History
+                </div>
+                <div class="card-body">
+                  <p>
+                    This is the google maps history template
+                  </p>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-success btn-sm" (click)="onNewSpotifyHistory()">
+                    New
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="sourceFilter('Spotify API')" class="col-auto mb-3">
+              <div class="card" style="width: 21rem;margin-top: 15px">
+                <div class="card-header">
+                  Spotify API
+                </div>
+                <div class="card-body">
+                  <p>
+                    This is the google maps history template
+                  </p>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-success btn-sm" (click)="onNewSpotifyAPI()">
+                    New
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="sourceFilter('Youtube History')" class="col-auto mb-3">
+              <div class="card" style="width: 21rem;margin-top: 15px">
+                <div class="card-header">
+                  Youtube History
+                </div>
+                <div class="card-body">
+                  <p>
+                    This is the google maps history template
+                  </p>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-success btn-sm" (click)="onNewYoutubeHistory()">
+                    New
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+    </ul>
+    <div class="container-fluid mt-4" [ngbNavOutlet]="nav"></div>
+  </div>
+</div>

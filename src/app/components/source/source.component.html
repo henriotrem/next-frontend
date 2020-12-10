@@ -1,0 +1,35 @@
+<div class="col-auto mb-3">
+  <div class="card" style="width: 21rem;margin-top: 15px">
+    <div class="card-header">
+      {{ source.name }}
+    </div>
+    <div class="card-body" *ngIf="apiFilter(source)">
+      <h5 class="card-title">Api based</h5>
+      <app-api *ngFor="let api of apis" [source]="source" [api]="api" [itemsService]="itemsService"></app-api>
+      <div class="form-group">
+        <button class="btn btn-primary btn-sm" type="button" (click)="onNewApi()">
+          New
+        </button>
+      </div>
+    </div>
+    <div class="card-body" *ngIf="fileFilter(source)">
+      <h5 class="card-title">File based</h5>
+      <app-file *ngFor="let file of files" [file]="file"></app-file>
+      <button *ngIf="!eta.state" class="btn btn-danger btn-sm" type="button" (click)="onStop()">
+        Stop
+      </button>
+      <button *ngIf="eta.pause" class="btn btn-success btn-sm" type="button" (click)="onResume()">
+        Resume
+      </button>
+      <div *ngIf="eta.state" class="form-group">
+        <button class="btn btn-primary btn-sm" type="button" (click)="filePicker.click()">
+          Pick file
+        </button>
+        <input type="file" #filePicker (change)="onFilePick($event)" style="display:none;" >
+      </div>
+    </div>
+    <div class="card-footer">
+      Last update on {{ source.createdAt | date :'mediumDate' }}
+    </div>
+  </div>
+</div>

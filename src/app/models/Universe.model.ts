@@ -1,5 +1,6 @@
 export class Universe {
   _id: string;
+  createdAt: Date;
 
   constructor(public key: string,
               public description: string,

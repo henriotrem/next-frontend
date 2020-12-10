@@ -1,7 +1,8 @@
 export class Photo {
   _id: string;
+  createdAt: Date;
 
-  constructor(public userId: string,
+  constructor(public originId: string,
               public url: string,
               public filename: string,
               public metadata: any,

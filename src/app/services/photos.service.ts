@@ -1,87 +1,68 @@
 import { Injectable } from '@angular/core';
-import {Photo} from '../models/Photo.model';
-import {Subject} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import {UniversesService} from "./universes.service";
-import {ConstantsService} from "./constants.service";
+import { ConstantsService } from './constants.service';
+import { ItemsService } from './items.service';
+import { Photo } from '../models/Photo.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PhotosService {
+export class PhotosService extends ItemsService {
 
-  photos: Photo[] = [];
-  photosSubject = new Subject<Photo[]>();
-
-  constructor(private universesService: UniversesService,  private constantsService: ConstantsService, private http: HttpClient) {}
-
-  emitPhotos(): void {
-    this.photosSubject.next(this.photos);
+  constructor(private constantsService: ConstantsService,
+              private http: HttpClient) {
+    super();
   }
 
-  savePhoto(photo: Photo) {
-    return new Promise((resolve, reject) => {
-      this.http.post( this.constantsService.baseAppUrl + '/api/photos/', photo).subscribe(
-        (response) => {
-          resolve(response);
-        },
-        (error) => {
-          reject(error);
-        }
-      );
-    });
+  addPhotos(photos: Photo[]): any {
+    return this.http.post(this.constantsService.baseAppUrl + '/api/photos', {photos});
   }
 
-  getAllPhotos(start: number): void {
-    this.http.get(this.constantsService.baseAppUrl + '/api/photos?start=' +start).subscribe(
-      (photos: Photo[]) => {
-
-        if (photos) {
-          this.photos = photos;
-          this.emitPhotos();
-        }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+  updatePhoto(photo: Photo): any {
+    return this.http.put(this.constantsService.baseAppUrl + '/api/photos/' + photo._id, photo);
   }
 
-  getPhotos(ids: string): any {
-    return new Promise((resolve, reject) => {
-      this.http.get(this.constantsService.baseAppUrl + '/api/photos/' + ids).subscribe(
-        (response) => {
-          resolve(response);
-        },
-        (error) => {
-          reject(error);
-        }
-      );
-    });
+  patchPhoto(photo: Photo, set: any): any {
+    return this.http.delete(this.constantsService.baseAppUrl + '/api/photos/' + photo._id, set);
   }
 
-  removePhoto(photo: Photo): any {
-    return new Promise((resolve, reject) => {
-      this.http.delete(this.constantsService.baseAppUrl + '/api/photos/' + photo._id).subscribe(
-        (response) => {
-          resolve(response);
-        },
-        (error) => {
-          reject(error);
-        }
-      );
-    });
+  patchPhotos(params: any, set: any): any {
+    return this.http.patch(this.constantsService.baseAppUrl + '/api/photos'
+      + this.constantsService.formatQuery(params), set);
   }
 
-  addPhoto(photo: Photo): void {
-    this.photos.push(photo);
-    this.savePhoto(photo).then(
-      (photo: Photo) => {
-        for(let universe of photo.universes) {
-          this.universesService.addElement(universe, photo);
-        }
-      }
-    );
-    this.emitPhotos();
+  deletePhoto(photo: Photo): any {
+    return this.http.delete(this.constantsService.baseAppUrl + '/api/photos/' + photo._id);
+  }
+
+  deletePhotos(params: any): any {
+    return this.http.delete(this.constantsService.baseAppUrl + '/api/photos'
+      + this.constantsService.formatQuery(params));
+  }
+
+  getPhotos(params: any): any {
+    return this.http.get(this.constantsService.baseAppUrl + '/api/photos'
+      + this.constantsService.formatQuery(params));
+  }
+
+  countPhotos(params: any): any {
+    return this.http.head(this.constantsService.baseAppUrl + '/api/photos'
+      + this.constantsService.formatQuery(params));
+  }
+
+  uploadItems(items: any[]): any {
+    return this.addPhotos(items);
+  }
+
+  getItems(params: any): any {
+    return this.getPhotos(params);
+  }
+
+  fileToArray(file: any): any {
+    return file;
+  }
+
+  objectToItem(obj: any): any {
+    return null;
   }
 }

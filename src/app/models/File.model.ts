@@ -1,13 +1,11 @@
 export class File {
   _id: string;
+  createdAt: Date;
 
-  constructor(
+  constructor(public sourceId: string,
               public signature: string,
-              public userId: string,
               public name: string,
               public size: number,
-              public type: string,
               public total: number,
-              public processed: number,
-              public universes: string[]) {}
+              public processed: number) {}
 }

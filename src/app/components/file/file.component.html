@@ -1,0 +1,16 @@
+<div>
+    <p>
+      Name : {{ file.name }}<br>
+      Total : {{ file.total }} items
+    </p>
+    <div *ngIf="file.processed !== file.total" style="margin-bottom: 10px">
+      <div class="progress" style="width: 250px">
+        <div class="progress-bar" role="progressbar"
+             [attr.aria-valuenow]="getProgress()"
+             aria-valuemin="0" aria-valuemax="100"
+             [style.width]="getProgress() +'%'">
+          {{getProgress()}}%
+        </div>
+      </div>
+    </div>
+</div>

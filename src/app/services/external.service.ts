@@ -1,25 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {ConstantsService} from "./constants.service";
+import { ConstantsService } from './constants.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExternalService {
 
+  constructor(private constantsService: ConstantsService,
+              private http: HttpClient) {}
 
-  constructor(private constantsService: ConstantsService, private http: HttpClient) {}
+  getGooglePhotos(params: any): any {
+    return this.http.get(this.constantsService.baseAppUrl + '/api/external/google/photos'
+      + this.constantsService.formatQuery(params));
+  }
 
-  loadGooglePhotos(): any {
-    return new Promise((resolve, reject) => {
-      this.http.get(this.constantsService.baseAppUrl + '/api/external/google/photos').subscribe(
-        (response) => {
-          resolve(response);
-        },
-        (error) => {
-          reject(error);
-        }
-      );
-    });
+  getSpotifyTrack(params: any): any {
+    return this.http.get(this.constantsService.baseAppUrl + '/api/external/spotify/track'
+      + this.constantsService.formatQuery(params));
   }
 }

@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="container">
+      <h2>Timeline</h2>
+      <button class="btn btn-primary" (click)="onPreviousDay()">Previous</button>
+      <button class="btn btn-primary" style="margin-left: 10px" (click)="onNextDay()">Next</button>
+    </div>
+    <div class="container" style="margin-top: 10px" >
+      <div class="list-group float-left" style="height: 600px; width: 600px; overflow:scroll;">
+        <button class="list-group-item" *ngFor="let segment of segments" >
+          <div *ngIf="segment.distance === 0 && (segment.duration.end-segment.duration.start) >= 900">
+            <div class="float-left">
+
+              <h4 class="list-group-item-heading">
+                {{ constantsService.formatMovement(segment) }}
+              </h4>
+              <p class="list-group-item-text">
+                Address
+              </p>
+            </div>
+
+            <p class="list-group-item-text float-right">
+              {{ constantsService.formatTime(segment.duration.start) }} - {{ constantsService.formatTime(segment.duration.end) }}
+            </p>
+          </div>
+          <div *ngIf="segment.distance > 0" style="padding-left: 10px; padding-right: 10px">
+            <div class="float-left">
+              <h5 class="list-group-item-heading">
+                {{ constantsService.formatMovement(segment) }} - {{ constantsService.formatDistance(segment.distance) }}
+              </h5>
+            </div>
+            <p class="list-group-item-text float-right">
+              {{ constantsService.formatDuration(segment.duration.end-segment.duration.start) }}
+            </p>
+          </div>
+          <div *ngIf="segment.distance === 0 && (segment.duration.end-segment.duration.start) < 900" style="odempadding-left: 20px; padding-right: 20px">
+            <div class="float-left">
+              <h6 class="list-group-item-heading">
+                {{ constantsService.formatMovement(segment) }} - {{ constantsService.formatDuration(segment.duration.end-segment.duration.start) }}
+              </h6>
+            </div>
+          </div>
+
+        </button>
+      </div>
+      <google-map class="float-right" width="450px" height="600px"
+                  [options]="constantsService.mapOptions">
+        <map-marker *ngFor="let marker of markers"
+                    [position]="marker"
+                    [options]="markerOptions"></map-marker>
+        <map-polyline *ngFor="let border of polylineBorders"
+                      [path]="border"
+                      [options]="polylineBorderOptions"></map-polyline>
+        <map-polyline *ngFor="let polyline of polylines"
+                      [path]="polyline"
+                      [options]="polylineOptions"></map-polyline>
+      </google-map>
+    </div>
+    <div class="container">
+      <h2>Photos</h2>
+      <div class="row">
+        <div *ngFor="let photos of gallery" class="column">
+          <img *ngFor="let photo of photos" src="{{ photo.url }}" (click)="onViewPhoto(photo)"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h2>Musics</h2>
+      <div class="row">
+        <div *ngFor="let music of musics" class="column">
+          <p>
+            {{ music.track }}<br>
+            {{ music.artists }}<br>
+            <!-- img src="{{ music.spotify ? music.spotify.album.images[0].url : '' }}" [width]="273" [height]="273" / -->
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h2>Watches</h2>
+      <div class="row">
+        <div *ngFor="let watch of watches" class="column">
+          <app-youtube [videoId]="watch.sourceUrl.split('=')[1]"></app-youtube>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

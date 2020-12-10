@@ -1,0 +1,25 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">JAKERI</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor01">
+    <ul class="navbar-nav mr-auto">
+      <li routerLinkActive="active" class="nav-item" *ngIf="isAuth">
+        <a class="nav-link" routerLink="timeline">Home <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <li routerLinkActive="active" class="nav-item" *ngIf="isAuth">
+        <a class="nav-link" routerLink="account">Account</a>
+      </li>
+      <li routerLinkActive="active" class="nav-item" *ngIf="!isAuth">
+        <a class="nav-link" routerLink="auth/signup">Sign up</a>
+      </li>
+      <li routerLinkActive="active" class="nav-item" *ngIf="!isAuth">
+        <a class="nav-link" routerLink="auth/login">Login</a>
+      </li>
+    </ul>
+  </div>
+</nav>
