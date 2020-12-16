@@ -4,6 +4,8 @@ import {ConstantsService} from './constants.service';
 import {ItemsService} from './items.service';
 import {Music} from '../models/Music.model';
 import * as moment from 'moment-timezone';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +45,15 @@ export class MusicsService extends ItemsService {
 
   getMusics(params: any): any {
     return this.http.get(this.constantsService.baseAppUrl + '/api/musics'
-      + this.constantsService.formatQuery(params));
+      + this.constantsService.formatQuery(params))
+      .pipe(
+        map((result: any) => {
+          for (let i = 0; i < result.musics.length; i++) {
+            result.musics[i] = Object.assign(new Music(), result.musics[i]);
+          }
+          return result;
+        })
+    );
   }
 
   countMusics(params: any): any {
@@ -67,7 +77,12 @@ export class MusicsService extends ItemsService {
 
     const endTime = moment.tz(obj.endTime, 'Europe/Paris').unix();
     const temporality = endTime - (obj.msPlayed / 1000);
+    const music = new Music();
 
-    return new Music('', obj.trackName, obj.artistName.split(', '), null, temporality);
+    music.track = obj.trackName;
+    music.artists = obj.artistName.split(', ');
+    music.temporality = temporality;
+
+    return music;
   }
 }

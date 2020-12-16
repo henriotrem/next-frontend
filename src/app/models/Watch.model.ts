@@ -1,10 +1,11 @@
 export class Watch {
   _id: string;
   createdAt: Date;
+  originId: string;
+  title: string;
+  sourceUrl: string;
+  geospatiality: any;
+  temporality: number;
 
-  constructor(public originId: string,
-              public title: string,
-              public sourceUrl: string,
-              public geospatiality: any,
-              public temporality: number) {}
+  constructor() {}
 }

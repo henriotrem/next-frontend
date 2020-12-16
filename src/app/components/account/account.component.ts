@@ -72,7 +72,12 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   onNewGoogleMapsHistory(): void {
-    const source = new Source('Google Maps History', 'location-file');
+    const source = new Source();
+
+    source.name = 'Google Maps History';
+    source.type = 'location-file';
+    source.provider = 'google-maps';
+
     this.sourcesService.addSources([source]).subscribe(
       (result) => {
         this.sources.push(...result.sources);
@@ -85,7 +90,12 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   onNewGooglePlacesAPI(): void {
-    const source = new Source('Google Places API', 'location-api-context');
+    const source = new Source();
+
+    source.name = 'Google Places API';
+    source.type = 'location-api-context';
+    source.provider = 'google-places';
+
     this.sourcesService.addSources([source]).subscribe(
       (result) => {
         this.sources.push(...result.sources);
@@ -98,7 +108,12 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   onNewGooglePhotoAPI(): void {
-    const source = new Source('Google Photo API', 'photo-api-data-oauth2');
+    const source = new Source();
+
+    source.name = 'Google Photo API';
+    source.type = 'photo-api-data-oauth2';
+    source.provider = 'google-photos';
+
     this.sourcesService.addSources([source]).subscribe(
       (result) => {
         this.sources.push(...result.sources);
@@ -111,7 +126,12 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   onNewSpotifyHistory(): void {
-    const source = new Source('Spotify History', 'music-file');
+    const source = new Source();
+
+    source.name = 'Spotify History';
+    source.type = 'music-file';
+    source.provider = 'spotify';
+
     this.sourcesService.addSources([source]).subscribe(
       (result) => {
         this.sources.push(...result.sources);
@@ -124,7 +144,12 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   onNewSpotifyAPI(): void {
-    const source = new Source('Spotify API', 'music-api-context-oauth2');
+    const source = new Source();
+
+    source.name = 'Spotify API';
+    source.type = 'music-api-context-oauth2';
+    source.provider = 'spotify';
+
     this.sourcesService.addSources([source]).subscribe(
       (result) => {
         this.sources.push(...result.sources);
@@ -137,7 +162,12 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   onNewYoutubeHistory(): void {
-    const source = new Source('Youtube History', 'watch-file');
+    const source = new Source();
+
+    source.name = 'Youtube History';
+    source.type = 'watch-file';
+    source.provider = 'youtube';
+
     this.sourcesService.addSources([source]).subscribe(
       (result) => {
         this.sources.push(...result.sources);

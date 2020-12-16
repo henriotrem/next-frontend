@@ -1,11 +1,11 @@
 export class Segment {
   _id: string;
   createdAt: Date;
+  duration: any;
+  distance: number;
+  location: any;
+  path: any[];
 
-  constructor(public duration: any,
-              public distance: number,
-              public location: any,
-              public path: any[],
-              public activities: string[]) {
+  constructor() {
   }
 }

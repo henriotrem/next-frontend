@@ -5,6 +5,8 @@ import {ConstantsService} from './constants.service';
 import * as crypto from 'crypto-js';
 import {Api} from '../models/Api.model';
 import {ItemsService} from './items.service';
+import {map} from 'rxjs/operators';
+import {File} from '../models/File.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +24,14 @@ export class ApisService {
 
   getApis(source: Source, params: any): any {
     return this.http.get(this.constantsService.baseAppUrl + '/api/sources/' + source._id + '/apis'
-      + this.constantsService.formatQuery(params));
+      + this.constantsService.formatQuery(params))
+      .pipe(
+        map((result: any) => {
+          for (let i = 0; i < result.apis.length; i++) {
+            result.apis[i] = Object.assign(new Api(), result.apis[i]);
+          }
+          return result;
+        })
+      );
   }
 }

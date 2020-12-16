@@ -42,6 +42,8 @@ import { TimelineComponent } from './components/timeline/timeline.component';
 import { UniverseSearchComponent } from './components/universe-search/universe-search.component';
 import { UniversesService } from './services/universes.service';
 import { YoutubeComponent } from './components/youtube/youtube.component';
+import {MapComponent} from './components/map/map.component';
+import {SegmentComponent} from './components/segment/segment.component';
 
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent },
@@ -66,7 +68,9 @@ const appRoutes: Routes = [
     FileComponent,
     ApiComponent,
     YoutubeComponent,
-    SourceComponent
+    SourceComponent,
+    MapComponent,
+    SegmentComponent
   ],
   imports: [
     BrowserModule,

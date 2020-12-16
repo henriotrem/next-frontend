@@ -71,7 +71,7 @@ export class SourceComponent implements OnInit, OnDestroy {
   onFilePick(event: Event): void {
     this.eta.state = false;
     this.eta.pause = false;
-    this.file = new File('', '', '', 0, 0, 0);
+    this.file = new File();
     this.input = (event.target as HTMLInputElement).files[0];
     this.filesService.uploadFile(this.source, this.files, this.file, this.itemsService, this.input, this.eta, (id, items) => {
       this.file = this.files.filter(f => f._id === id)[0];

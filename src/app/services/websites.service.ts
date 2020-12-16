@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { ConstantsService } from './constants.service';
 import { ItemsService } from './items.service';
 import { Website } from '../models/Website.model';
+import {map} from 'rxjs/operators';
+import {Api} from '../models/Api.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +44,15 @@ export class WebsitesService extends ItemsService {
 
   getWebsites(params: any): any {
     return this.http.get(this.constantsService.baseAppUrl + '/api/websites'
-      + this.constantsService.formatQuery(params));
+      + this.constantsService.formatQuery(params))
+      .pipe(
+        map((result: any) => {
+          for (let i = 0; i < result.websites.length; i++) {
+            result.websites[i] = Object.assign(new Website(), result.websites[i]);
+          }
+          return result;
+        })
+      );
   }
 
   countWebsites(params: any): any {
@@ -61,7 +71,10 @@ export class WebsitesService extends ItemsService {
   objectToItem(obj: any): any {
 
     const temporality = (new Date(Date.parse(obj.time))).getTime() / 1000;
-    const website = new Website('', obj.url, null, temporality);
+    const website = new Website();
+
+    website.sourceUrl = obj.url;
+    website.temporality = temporality;
 
     return website;
   }

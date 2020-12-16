@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { ConstantsService } from './constants.service';
 import { ItemsService } from './items.service';
 import { Position } from '../models/Position.model';
+import {map} from 'rxjs/operators';
+import {Photo} from '../models/Photo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +44,15 @@ export class PositionsService extends ItemsService {
 
   getPositions(params: any): any {
     return this.http.get(this.constantsService.baseAppUrl + '/api/positions'
-      + this.constantsService.formatQuery(params));
+      + this.constantsService.formatQuery(params))
+      .pipe(
+        map((result: any) => {
+          for (let i = 0; i < result.positions.length; i++) {
+            result.positions[i] = Object.assign(new Position(), result.positions[i]);
+          }
+          return result;
+        })
+      );
   }
 
   countPositions(params: any): any {
@@ -70,7 +80,11 @@ export class PositionsService extends ItemsService {
     };
 
     const temporality = obj.timestampMs / 1000;
+    const position = new Position();
 
-    return new Position('', geospatiality, temporality);
+    position.geospatiality = geospatiality;
+    position.temporality = temporality;
+
+    return position
   }
 }

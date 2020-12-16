@@ -1,13 +1,14 @@
 export class Photo {
   _id: string;
   createdAt: Date;
+  originId: string;
+  url: string;
+  filename: string;
+  metadata: any;
+  mimeType: string;
+  geospatiality: number[];
+  temporality: number;
+  universes: string[];
 
-  constructor(public originId: string,
-              public url: string,
-              public filename: string,
-              public metadata: any,
-              public mimeType: string,
-              public geospatiality: number[],
-              public temporality: number,
-              public universes: string[]) {}
+  constructor() {}
 }

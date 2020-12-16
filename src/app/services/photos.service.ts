@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { ConstantsService } from './constants.service';
 import { ItemsService } from './items.service';
 import { Photo } from '../models/Photo.model';
+import {map} from 'rxjs/operators';
+import {Music} from '../models/Music.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +44,15 @@ export class PhotosService extends ItemsService {
 
   getPhotos(params: any): any {
     return this.http.get(this.constantsService.baseAppUrl + '/api/photos'
-      + this.constantsService.formatQuery(params));
+      + this.constantsService.formatQuery(params))
+      .pipe(
+        map((result: any) => {
+          for (let i = 0; i < result.photos.length; i++) {
+            result.photos[i] = Object.assign(new Photo(), result.photos[i]);
+          }
+          return result;
+        })
+      );
   }
 
   countPhotos(params: any): any {

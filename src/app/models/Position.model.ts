@@ -1,8 +1,9 @@
 export class Position {
   _id: string;
   createdAt: Date;
+  originId: string;
+  geospatiality: any;
+  temporality: number;
 
-  constructor(public originId: string,
-              public geospatiality: any,
-              public temporality: number) {}
+  constructor() {}
 }

@@ -1,11 +1,12 @@
 export class Api {
   _id: string;
   createdAt: Date;
+  sourceId: string;
+  email: string;
+  token: string;
+  refreshToken: string;
+  callback: string;
+  scopes: string[];
 
-  constructor(public sourceId: string,
-              public email: string,
-              public token: string,
-              public refreshToken: string,
-              public callback: string,
-              public scopes: string[]) {}
+  constructor() {}
 }

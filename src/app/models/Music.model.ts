@@ -1,10 +1,11 @@
 export class Music {
   _id: string;
   createdAt: Date;
+  originId: string;
+  track: string;
+  artists: string[];
+  geospatiality: any;
+  temporality: number;
 
-  constructor(public originId: string,
-              public track: string,
-              public artists: string[],
-              public geospatiality: any,
-              public temporality: number) {}
+  constructor() {}
 }

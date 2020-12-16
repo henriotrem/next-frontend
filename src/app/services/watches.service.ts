@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { ConstantsService } from './constants.service';
 import { ItemsService } from './items.service';
 import { Watch } from '../models/Watch.model';
+import {map} from 'rxjs/operators';
+import {Photo} from '../models/Photo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +44,15 @@ export class WatchesService extends ItemsService {
 
   getWatches(params: any): any {
     return this.http.get(this.constantsService.baseAppUrl + '/api/watches'
-      + this.constantsService.formatQuery(params));
+      + this.constantsService.formatQuery(params))
+      .pipe(
+        map((result: any) => {
+          for (let i = 0; i < result.watches.length; i++) {
+            result.watches[i] = Object.assign(new Watch(), result.watches[i]);
+          }
+          return result;
+        })
+      );
   }
 
   countWatches(params: any): any {
@@ -65,7 +75,11 @@ export class WatchesService extends ItemsService {
   objectToItem(obj: any): any {
 
     const temporality = (new Date(Date.parse(obj.time))).getTime() / 1000;
-    const watch = new Watch('', obj.title, obj.titleUrl, null, temporality);
+    const watch = new Watch();
+
+    watch.sourceUrl = obj.title;
+    watch.title = obj.titleUrl;
+    watch.temporality = temporality;
 
     return watch;
   }

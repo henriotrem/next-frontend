@@ -1,0 +1,61 @@
+<div class="row">
+  <div *ngIf="segment.distance === 0 && (segment.duration.end-segment.duration.start) >= 900" class=" container-fluid">
+    <div class="float-left">
+
+      <h4 class="list-group-item-heading">
+        {{ constantsService.formatMovement(segment) }}
+      </h4>
+      <p class="list-group-item-text">
+        Address
+      </p>
+    </div>
+
+    <p class="list-group-item-text float-right">
+      {{ constantsService.formatTime(segment.duration.start) }} - {{ constantsService.formatTime(segment.duration.end) }}
+    </p>
+  </div>
+  <div *ngIf="segment.distance === 0 && (segment.duration.end-segment.duration.start) < 900" style="padding-left: 20px; padding-right: 20px"  class=" container-fluid">
+    <div class="float-left">
+      <h6 class="list-group-item-heading">
+        {{ constantsService.formatMovement(segment) }} - {{ constantsService.formatDuration(segment.duration.end-segment.duration.start) }}
+      </h6>
+    </div>
+  </div>
+  <div *ngIf="segment.distance > 0" style="padding-left: 10px; padding-right: 10px"  class=" container-fluid">
+    <div class="float-left">
+      <h5 class="list-group-item-heading">
+        {{ constantsService.formatMovement(segment) }} - {{ constantsService.formatDistance(segment.distance) }}
+      </h5>
+    </div>
+    <p class="list-group-item-text float-right">
+      {{ constantsService.formatDuration(segment.duration.end-segment.duration.start) }}
+    </p>
+  </div>
+  <div *ngFor="let content of contents" class="float-left container">
+    <div *ngIf="content.type === 'Photo'" class="row" >
+      <div *ngFor="let photo of content.data" class="column">
+        <img src="{{ photo.url }}" />
+      </div>
+    </div>
+    <div *ngIf="content.type === 'Music'" class="row" >
+      <div *ngFor="let music of content.data" class="column">
+        <p>
+          {{ music.track }}<br>
+          {{ music.artists }}<br>
+        </p>
+      </div>
+    </div>
+    <div *ngIf="content.type === 'Watch'" class="row" >
+      <div *ngFor="let watch of content.data" class="column">
+        <app-youtube [videoId]="watch.sourceUrl.split('=')[1]"></app-youtube>
+      </div>
+    </div>
+    <div *ngIf="content.type === 'Website'" class="row" >
+      <div *ngFor="let website of content.data" class="column">
+        <p>
+          {{ website.url }}<br>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

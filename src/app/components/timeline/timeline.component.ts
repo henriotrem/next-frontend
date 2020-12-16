@@ -1,6 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
-import {GoogleMap} from '@angular/google-maps';
+import {Component, OnInit} from '@angular/core';
 import {Segment} from '../../models/Segment.model';
 import {SegmentsService} from '../../services/segments.service';
 import {ConstantsService} from '../../services/constants.service';
@@ -10,43 +8,34 @@ import {Music} from '../../models/Music.model';
 import {Watch} from '../../models/Watch.model';
 import {WatchesService} from '../../services/watches.service';
 import {ExternalService} from '../../services/external.service';
+import {Website} from '../../models/Website.model';
+import {WebsitesService} from '../../services/websites.service';
+import {PhotosService} from '../../services/photos.service';
 
 @Component({
   selector: 'app-timeline',
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.scss']
 })
-export class TimelineComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
+export class TimelineComponent implements OnInit {
 
-  timestamp = 1600300800;
+  timestamp: number;
 
-  segments: Segment[];
+  activities: any[] = [];
+  segments: Segment[] = [];
+  items = [];
 
-  musics: Music[];
-  watches: Watch[];
-  gallery: Photo[][];
-  columns = 4;
-
-  markers: google.maps.LatLngLiteral[] = [];
-  markerOptions = {draggable: false, icon: {
-      url: this.constantsService.baseAppUrl + '/images/marker.png',
-      anchor: new google.maps.Point(10, 10)
-    }};
-
-  polylines = [];
-  polylineBorders = [];
-  polylineOptions = {geodesic: true, zIndex: 11, strokeColor: '#33BBFF', strokeOpacity: 1, strokeWeight: 6};
-  polylineBorderOptions = {geodesic: true, zIndex: 10, strokeColor: '#FFFFFF', strokeOpacity: 1, strokeWeight: 8};
-
-  constructor(private externalService: ExternalService,
+  constructor(private segmentsService: SegmentsService,
+              private photosService: PhotosService,
               private musicsService: MusicsService,
               private watchesService: WatchesService,
-              private segmentsService: SegmentsService,
-              public constantsService: ConstantsService,
-              private router: Router) { }
+              private websitesService: WebsitesService,
+              private externalService: ExternalService,
+              public constantsService: ConstantsService) { }
 
   ngOnInit(): void {
+    this.timestamp = 1600300800;
+    this.refreshAllItems();
   }
 
   onPreviousDay(): void {
@@ -59,105 +48,89 @@ export class TimelineComponent implements OnInit, OnDestroy, AfterViewInit {
     this.refreshAllItems();
   }
 
-  onViewPhoto(photo: Photo): void {
-    this.router.navigate(['/photos', 'view', photo._id]);
-  }
-
-  ngAfterViewInit(): void {
-    this.refreshAllItems();
-  }
-
   refreshAllItems(): void {
-    this.segmentsService.getSegments({start: this.timestamp, end: this.timestamp + 3600 * 24}).subscribe(
-      (result) => {
 
-        this.segments = result.segments;
-        this.markers = [];
-        this.polylines = [];
-        this.polylineBorders = [];
+    const params = {start: this.timestamp, end: this.timestamp + 3600 * 24};
 
-        const bounds = new google.maps.LatLngBounds();
+    this.segments = [];
+    this.items = [];
 
-        for (let i = 0; i < this.segments.length; i++) {
+    let requests = 5;
 
-          const segment = this.segments[i];
-          const previous = i > 0 ? this.segments[i - 1] : null;
-          const next = i < (this.segments.length - 1) ? this.segments[i + 1] : null;
-
-          bounds.extend(this.createMarker(segment.location));
-
-          if (segment.path.length > 0) {
-
-            const polyline = [];
-
-            if (previous) {
-              polyline.push(this.createMarker(previous.location));
-            }
-
-            for (const location of segment.path) {
-              polyline.push(this.createMarker(location));
-            }
-
-            if (next) {
-              polyline.push(this.createMarker(next.location));
-            }
-
-            this.polylineBorders.push(polyline);
-            this.polylines.push(polyline);
-          } else {
-
-            this.markers.push(this.createMarker(segment.location));
-          }
+    this.segmentsService.getSegments(params)
+      .subscribe((result) => {
+        this.segments.push(...result.segments);
+        if (!--requests) {
+          this.getActivities();
         }
-
-        this.map.fitBounds(bounds);
-      }
-    );
-    // this.externalService.getGooglePhotos(this.timestamp).subscribe(
-    //   (photos: any) => {
-    //
-    //     this.gallery = [];
-    //
-    //     for (let c = 0; c < this.columns; c++) {
-    //       this.gallery[c] = [];
-    //       for (let i = c; i < photos.length; i = i + this.columns) {
-    //         this.gallery[c].push(photos[i]);
-    //       }
-    //     }
-    //
-    //   }
-    // );
-    this.musicsService.getMusics({start: this.timestamp, end: this.timestamp + 3600 * 24}).subscribe(
-      (result: any) => {
-
-        this.musics = result.musics;
-
-        for (const music of this.musics) {
-          const params = {
-            apiId: music.artists[0],
-            artist: music.artists[0],
-            track: music.track
-          };
-          this.externalService.getSpotifyTrack(params).then(
-            (result) => {
-              // music.spotify = result.tracks.items[0];
-            }
-          );
+      });
+    this.photosService.getPhotos(params)
+      .subscribe((result: { photos: Photo[] }) => {
+        this.items.push(...result.photos);
+        if (!--requests) {
+          this.getActivities();
         }
-      }
-    );
-    this.watchesService.getWatches({start: this.timestamp, end: this.timestamp + 3600 * 24}).subscribe(
-      (result: any) => {
+      });
+    this.musicsService.getMusics(params)
+      .subscribe((result: { musics: Music[] }) => {
+        this.items.push(...result.musics);
+        if (!--requests) {
+          this.getActivities();
+        }
+      });
+    this.watchesService.getWatches(params)
+      .subscribe((result: { watches: Watch[] }) => {
+        this.items.push(...result.watches);
+        if (!--requests) {
+          this.getActivities();
+        }
+      });
+    this.websitesService.getWebsites(params)
+      .subscribe((result: { websites: Website[] }) => {
+        this.items.push(...result.websites);
+        if (!--requests) {
+          this.getActivities();
+        }
+      });
+    /*this.externalService.getExternalData(externalPhotoSource, params)
+      .subscribe((result: any) => this.photos.concat(result.photos));*/
 
-        this.watches = result.watches;
-      }
-    );
   }
 
-  createMarker(location: any): any {
-    return {lat: location.latitude, lng: location.longitude};
+  getActivities(): void {
+
+    this.activities = [];
+
+    for (const segment of this.segments) {
+      const activity = {
+        segment,
+        contents: this.getContents(segment)
+      };
+      this.activities.push(activity);
+    }
+
+    console.log(this.activities);
   }
 
-  ngOnDestroy(): void {
+  getContents(segment: Segment): any {
+
+    const contents = [];
+    let content = { type: 'Undefined', data: [] };
+    const items = this.items
+      .filter((item) => item.temporality >= segment.duration.start && item.temporality < segment.duration.end)
+      .sort((a, b) => a.temporality > b.temporality ? 1 : -1);
+    for (const item of items) {
+      if (content.data && content.type !== item.constructor.name) {
+        contents.push(content);
+        content = { type: item.constructor.name, data: [item] };
+      } else {
+        content.data.push(item);
+      }
+    }
+    if (content.data.length > 0) {
+      contents.push(content);
+    }
+
+    return contents;
   }
 }

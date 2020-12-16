@@ -5,6 +5,7 @@ import {ConstantsService} from './constants.service';
 import * as crypto from 'crypto-js';
 import {File} from '../models/File.model';
 import {ItemsService} from './items.service';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,15 @@ export class FilesService {
 
   getFiles(source: Source, params: any): any {
     return this.http.get(this.constantsService.baseAppUrl + '/api/sources/' + source._id + '/files'
-      + this.constantsService.formatQuery(params));
+      + this.constantsService.formatQuery(params))
+      .pipe(
+        map((result: any) => {
+          for (let i = 0; i < result.files.length; i++) {
+            result.files[i] = Object.assign(new File(), result.files[i]);
+          }
+          return result;
+        })
+      );
   }
 
   patchFileProcessed(source: Source, file: File, increment: number): any {

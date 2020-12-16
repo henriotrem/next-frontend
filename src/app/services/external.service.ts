@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ConstantsService } from './constants.service';
+import {Api} from '../models/Api.model';
+import {Source} from '../models/Source.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +12,13 @@ export class ExternalService {
   constructor(private constantsService: ConstantsService,
               private http: HttpClient) {}
 
-  getGooglePhotos(params: any): any {
-    return this.http.get(this.constantsService.baseAppUrl + '/api/external/google/photos'
+  getExternalData(source: Source, params: any): any {
+    return this.http.get(this.constantsService.baseAppUrl + '/api/external/' + source.provider + '/data'
       + this.constantsService.formatQuery(params));
   }
 
-  getSpotifyTrack(params: any): any {
-    return this.http.get(this.constantsService.baseAppUrl + '/api/external/spotify/track'
+  getExternalContext(source: Source, params: any): any {
+    return this.http.get(this.constantsService.baseAppUrl + '/api/external/' + source.provider + '/context'
       + this.constantsService.formatQuery(params));
   }
 }
