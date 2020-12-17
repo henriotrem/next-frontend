@@ -44,6 +44,10 @@ import { UniversesService } from './services/universes.service';
 import { YoutubeComponent } from './components/youtube/youtube.component';
 import {MapComponent} from './components/map/map.component';
 import {SegmentComponent} from './components/segment/segment.component';
+import { PhotosComponent } from './components/photos/photos.component';
+import { MusicsComponent } from './components/musics/musics.component';
+import { WatchesComponent } from './components/watches/watches.component';
+import { WebsitesComponent } from './components/websites/websites.component';
 
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent },
@@ -70,7 +74,11 @@ const appRoutes: Routes = [
     YoutubeComponent,
     SourceComponent,
     MapComponent,
-    SegmentComponent
+    SegmentComponent,
+    PhotosComponent,
+    MusicsComponent,
+    WatchesComponent,
+    WebsitesComponent
   ],
   imports: [
     BrowserModule,

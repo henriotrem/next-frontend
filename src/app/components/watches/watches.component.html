@@ -1,0 +1,5 @@
+<div class="row" >
+  <div *ngFor="let watch of watches" class="column">
+    <app-youtube [videoId]="watch.sourceUrl.split('=')[1]"></app-youtube>
+  </div>
+</div>

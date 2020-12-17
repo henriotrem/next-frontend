@@ -21,24 +21,9 @@ import {Source} from '../../models/Source.model';
 export class SegmentComponent implements OnInit {
 
   @Input() segment: Segment;
-  @Input() contents: any[];
 
-  constructor(private externalService: ExternalService,
-              public constantsService: ConstantsService) { }
+  constructor(public constantsService: ConstantsService) { }
 
   ngOnInit(): void {
-  }
-
-  photoFilter(item: any): boolean {
-    return item.constructor.name === 'Photo';
-  }
-  musicFilter(item: any): boolean {
-    return item.constructor.name === 'Music';
-  }
-  watchFilter(item: any): boolean {
-    return item.constructor.name === 'Watch';
-  }
-  websiteFilter(item: any): boolean {
-    return item.constructor.name === 'Website';
   }
 }

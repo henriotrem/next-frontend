@@ -64,7 +64,7 @@ export class SourceComponent implements OnInit, OnDestroy {
   }
 
   onNewApi(): void {
-    this.nativeWindow.open(this.constantsService.baseAppUrl + '/api/external/spotify?origin='
+    this.nativeWindow.open(this.constantsService.baseAppUrl + '/api/external/' + this.source.provider + '?origin='
       + localStorage.getItem('user_id') + '-' + this.source._id);
   }
 

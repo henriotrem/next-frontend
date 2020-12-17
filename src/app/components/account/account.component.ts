@@ -112,7 +112,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     source.name = 'Google Photo API';
     source.type = 'photo-api-data-oauth2';
-    source.provider = 'google-photos';
+    source.provider = 'google';
 
     this.sourcesService.addSources([source]).subscribe(
       (result) => {

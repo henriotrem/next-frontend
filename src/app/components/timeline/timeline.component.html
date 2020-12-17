@@ -6,7 +6,13 @@
       <button class="btn btn-primary" style="margin-left: 10px" (click)="onNextDay()">Next</button>
     </div>
     <div *ngFor="let activity of activities">
-      <app-segment [segment]="activity.segment" [contents]="activity.contents"></app-segment>
+      <app-segment [segment]="activity.segment"></app-segment>
+      <div *ngFor="let content of activity.contents" class="float-left container">
+        <app-photos *ngIf="content.type === 'Photo'" [photos]="content.data"></app-photos>
+        <app-musics *ngIf="content.type === 'Music'" [musics]="content.data"></app-musics>
+        <app-watches *ngIf="content.type === 'Watch'" [watches]="content.data"></app-watches>
+        <app-websites *ngIf="content.type === 'Website'" [websites]="content.data"></app-websites>
+      </div>
     </div>
   </div>
 </div>

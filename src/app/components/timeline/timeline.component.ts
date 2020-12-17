@@ -11,6 +11,8 @@ import {ExternalService} from '../../services/external.service';
 import {Website} from '../../models/Website.model';
 import {WebsitesService} from '../../services/websites.service';
 import {PhotosService} from '../../services/photos.service';
+import {SourcesService} from '../../services/sources.service';
+import {Source} from '../../models/Source.model';
 
 @Component({
   selector: 'app-timeline',
@@ -21,6 +23,8 @@ export class TimelineComponent implements OnInit {
 
   timestamp: number;
 
+  dataSources: Source[] = [];
+  contextSources: Source[] = [];
   activities: any[] = [];
   segments: Segment[] = [];
   items = [];
@@ -30,12 +34,19 @@ export class TimelineComponent implements OnInit {
               private musicsService: MusicsService,
               private watchesService: WatchesService,
               private websitesService: WebsitesService,
+              private sourcesService: SourcesService,
               private externalService: ExternalService,
               public constantsService: ConstantsService) { }
 
   ngOnInit(): void {
     this.timestamp = 1600300800;
-    this.refreshAllItems();
+
+    this.sourcesService.getSources({})
+      .subscribe((result) => {
+        this.dataSources.push(...result.sources.filter(s => s.type.indexOf('data') !== -1));
+        this.contextSources.push(...result.sources.filter(s => s.type.indexOf('context') !== -1));
+        this.refreshAllItems();
+      });
   }
 
   onPreviousDay(): void {
@@ -55,7 +66,7 @@ export class TimelineComponent implements OnInit {
     this.segments = [];
     this.items = [];
 
-    let requests = 5;
+    let requests = 5 + this.dataSources.length;
 
     this.segmentsService.getSegments(params)
       .subscribe((result) => {
@@ -92,9 +103,43 @@ export class TimelineComponent implements OnInit {
           this.getActivities();
         }
       });
-    /*this.externalService.getExternalData(externalPhotoSource, params)
-      .subscribe((result: any) => this.photos.concat(result.photos));*/
 
+    for (const source of this.dataSources) {
+
+      if (source.type.indexOf('photo') !== -1) {
+        this.externalService.getExternalData(source, params)
+          .subscribe((result: { photos: Photo[] }) => {
+            this.items.push(...result.photos);
+            if (!--requests) {
+              this.getActivities();
+            }
+          });
+      } else if (source.type.indexOf('music') !== -1) {
+        this.externalService.getExternalData(source, params)
+          .subscribe((result: { musics: Music[] }) => {
+            this.items.push(...result.musics);
+            if (!--requests) {
+              this.getActivities();
+            }
+          });
+      } else if (source.type.indexOf('watch') !== -1) {
+        this.externalService.getExternalData(source, params)
+          .subscribe((result: { watches: Watch[] }) => {
+            this.items.push(...result.watches);
+            if (!--requests) {
+              this.getActivities();
+            }
+          });
+      } else if (source.type.indexOf('website') !== -1) {
+        this.externalService.getExternalData(source, params)
+          .subscribe((result: { websites: Website[] }) => {
+            this.items.push(...result.websites);
+            if (!--requests) {
+              this.getActivities();
+            }
+          });
+      }
+    }
   }
 
   getActivities(): void {
@@ -109,7 +154,7 @@ export class TimelineComponent implements OnInit {
       this.activities.push(activity);
     }
 
-    console.log(this.activities);
+    console.log(this.items);
   }
 
   getContents(segment: Segment): any {
@@ -120,10 +165,11 @@ export class TimelineComponent implements OnInit {
       .filter((item) => item.temporality >= segment.duration.start && item.temporality < segment.duration.end)
       .sort((a, b) => a.temporality > b.temporality ? 1 : -1);
     for (const item of items) {
-      if (content.data && content.type !== item.constructor.name) {
+      if (content.data.length > 0 && content.type !== item.constructor.name) {
         contents.push(content);
         content = { type: item.constructor.name, data: [item] };
       } else {
+        content.type = item.constructor.name;
         content.data.push(item);
       }
     }
