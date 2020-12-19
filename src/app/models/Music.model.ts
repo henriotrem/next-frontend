@@ -4,6 +4,7 @@ export class Music {
   originId: string;
   track: string;
   artists: string[];
+  albumUrl: string;
   geospatiality: any;
   temporality: number;
 

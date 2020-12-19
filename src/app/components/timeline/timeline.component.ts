@@ -39,7 +39,7 @@ export class TimelineComponent implements OnInit {
               public constantsService: ConstantsService) { }
 
   ngOnInit(): void {
-    this.timestamp = 1600300800;
+    this.timestamp = 1602684000;
 
     this.sourcesService.getSources({})
       .subscribe((result) => {
@@ -178,5 +178,10 @@ export class TimelineComponent implements OnInit {
     }
 
     return contents;
+  }
+
+  getContextSource(type: string): Source {
+    const contextSources = this.contextSources.filter((source) => source.type.indexOf('context') && source.type.indexOf(type) !== -1);
+    return contextSources.length > 0 ? contextSources[0] : null;
   }
 }

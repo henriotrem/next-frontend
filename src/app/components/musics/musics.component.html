@@ -1,8 +1,9 @@
 <div class="row" >
-  <div *ngFor="let music of musics" class="column" style="padding: 5px">
+  <div *ngFor="let music of musics| slice:0:7; let i=index" style="margin-right: 10px" class="column">
     <p>
-      {{ music.track }}<br>
-      {{ music.artists }}<br>
+      <img src="{{ music.albumUrl }}" height="150"/><br>
+      <span class="text">{{ music.track }}</span>
+      <span class="text">{{ music.artists }}</span>
     </p>
   </div>
 </div>

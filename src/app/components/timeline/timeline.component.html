@@ -7,11 +7,11 @@
     </div>
     <div *ngFor="let activity of activities">
       <app-segment [segment]="activity.segment"></app-segment>
-      <div *ngFor="let content of activity.contents" class="float-left container">
-        <app-photos *ngIf="content.type === 'Photo'" [photos]="content.data"></app-photos>
-        <app-musics *ngIf="content.type === 'Music'" [musics]="content.data"></app-musics>
-        <app-watches *ngIf="content.type === 'Watch'" [watches]="content.data"></app-watches>
-        <app-websites *ngIf="content.type === 'Website'" [websites]="content.data"></app-websites>
+      <div *ngFor="let content of activity.contents" class="float-left container" style="margin-bottom: 10px">
+        <app-photos *ngIf="content.type === 'Photo'" [source]="getContextSource('photo')" [photos]="content.data"></app-photos>
+        <app-musics *ngIf="content.type === 'Music'" [source]="getContextSource('music')" [musics]="content.data"></app-musics>
+        <app-watches *ngIf="content.type === 'Watch'" [source]="getContextSource('watch')" [watches]="content.data"></app-watches>
+        <app-websites *ngIf="content.type === 'Website'" [source]="getContextSource('website')" [websites]="content.data"></app-websites>
       </div>
     </div>
   </div>

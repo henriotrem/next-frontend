@@ -1,5 +1,5 @@
 <div class="row" >
-  <div *ngFor="let photo of photos" class="column">
-    <img src="{{ photo.url }}" />
+  <div *ngFor="let row of gallery" class="column">
+    <img *ngFor="let photo of row.photos" [height]="row.height" src="{{ photo.url }}" style="margin: 3px" />
   </div>
 </div>
