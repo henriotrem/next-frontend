@@ -10,18 +10,11 @@ import {ConstantsService} from '../../services/constants.service';
 })
 export class MapComponent implements AfterViewInit {
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
-  @Input() segments: Segment[];
+  @Input() activities: any;
 
-  markers: google.maps.LatLngLiteral[] = [];
-  markerOptions = {draggable: false, icon: {
-      url: this.constantsService.baseAppUrl + '/images/marker.png',
-      anchor: new google.maps.Point(10, 10)
-    }};
-
+  markers = [];
   polylines = [];
   polylineBorders = [];
-  polylineOptions = {geodesic: true, zIndex: 11, strokeColor: '#33BBFF', strokeOpacity: 1, strokeWeight: 6};
-  polylineBorderOptions = {geodesic: true, zIndex: 10, strokeColor: '#FFFFFF', strokeOpacity: 1, strokeWeight: 8};
 
   constructor(public constantsService: ConstantsService) { }
 
@@ -37,11 +30,11 @@ export class MapComponent implements AfterViewInit {
 
     const bounds = new google.maps.LatLngBounds();
 
-    for (let i = 0; i < this.segments.length; i++) {
+    for (let i = 0; i < this.activities.length; i++) {
 
-      const segment = this.segments[i];
-      const previous = i > 0 ? this.segments[i - 1] : null;
-      const next = i < (this.segments.length - 1) ? this.segments[i + 1] : null;
+      const segment = this.activities[i].segment;
+      const previous = i > 0 ? this.activities[i - 1].segment : null;
+      const next = i < (this.activities[i].segment.length - 1) ? this.activities[i + 1].segment : null;
 
       bounds.extend(this.createMarker(segment.location));
 
@@ -64,12 +57,53 @@ export class MapComponent implements AfterViewInit {
         this.polylineBorders.push(polyline);
         this.polylines.push(polyline);
       } else {
+        const marker = {
+          location: this.createMarker(segment.location),
+          options: this.constantsService.markerOptions.stop
+        };
+        marker.options.label.text = 'test';
+        this.markers.push(marker);
+      }
 
-        this.markers.push(this.createMarker(segment.location));
+      for (const content of this.activities[i].contents) {
+        for (const item of content.data) {
+          const marker = {
+            location: this.createMarker(this.calculateLocation(item, segment)),
+            options: this.constantsService.markerOptions[content.type.toLowerCase()]
+          };
+          this.markers.push(marker);
+        }
       }
     }
 
     this.map.fitBounds(bounds);
+  }
+
+  calculateLocation(item: any, segment: Segment): any {
+    let previous = {
+      ...segment.location,
+      timestamp: segment.duration.start
+    };
+    for (const next of segment.path) {
+      if (next.timestamp > item.temporality) {
+        const ratio = (item.temporality - previous.timestamp) / (next.timestamp - previous.timestamp);
+        const location = {
+          latitude: previous.latitude + (next.latitude - previous.latitude) * ratio,
+          longitude: previous.longitude + (next.longitude - previous.longitude) * ratio
+        };
+        console.log(item);
+        console.log(segment);
+        console.log(ratio);
+        console.log(location);
+        return location;
+      }
+      previous = next;
+    }
+    const result = {
+      latitude: segment.location.latitude,
+      longitude: segment.location.longitude
+    };
+    return result;
   }
 
   createMarker(location: any): any {

@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Watch} from '../../models/Watch.model';
-import {Source} from '../../models/Source.model';
 
 @Component({
   selector: 'app-watches',
@@ -10,7 +9,7 @@ import {Source} from '../../models/Source.model';
 export class WatchesComponent implements OnInit {
 
   @Input() watches: Watch[];
-  @Input() source: Source;
+  @Input() context: any;
 
   constructor() { }
 

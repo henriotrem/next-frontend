@@ -47,7 +47,7 @@ this.prepare = function(universes) {
 
   for(let name of universes) {
 
-    this.service.getUniverse(name).then(
+    this.service.getUniverse(name).subscribe(
       (universe) => {
 
         this.universes[name] = universe;
@@ -66,7 +66,7 @@ this.prepare = function(universes) {
         if (++this.layer.target === size)
           this.query();
       }
-    ).catch();
+    )
   }
 };
 this.create = function(key, count, universe) {
@@ -154,7 +154,7 @@ this.select = function () {
 
         let id = (element.type !== 'object' ? element.key.substring(element.key.indexOf(".")+1) : element.key.split('.')[0].split('|')[1]);
 
-        this.layer.query[element.universe][element.type].ids += (this.layer.query[element.universe][element.type].ids.length > 0 ? ';' : '') + id;
+        this.layer.query[element.universe][element.type].ids += (this.layer.query[element.universe][element.type].ids.length > 0 ? ',' : '') + id;
         this.layer.query[element.universe][element.type].elements.push(element);
 
         selected++;
@@ -195,7 +195,7 @@ this.query = function () {
 };
 this.index = function(universe, ids, elements) {
 
-  this.service.getIndexes(universe, ids).then(
+  this.service.getIndexes(universe, ids).subscribe(
     (indexes) => {
 
       let i = 0;
@@ -214,7 +214,7 @@ this.index = function(universe, ids, elements) {
 };
 this.list = function(universe, ids, elements) {
 
-  this.service.getLists(universe, ids).then(
+  this.service.getLists(universe, ids).subscribe(
     (lists) => {
 
       let i = 0;

@@ -5,6 +5,43 @@ import {Segment} from '../models/Segment.model';
 @Injectable()
 export class ConstantsService{
   readonly baseAppUrl: string = environment.apiUrl; // 'http://172.20.10.3:3000';
+  readonly markerOptions = {
+    stop: {
+      draggable: false,
+      icon: {
+        url: this.baseAppUrl + '/images/marker.png',
+        anchor: new google.maps.Point(10, 10),
+        labelOrigin: new google.maps.Point(10, 30),
+      },
+      label: { color: '#000000', fontWeight: 'bold', fontSize: '14px', text: 'test2' }
+    },
+    photo: {
+      draggable: false,
+      icon: {
+        url: this.baseAppUrl + '/images/red_dot.png'
+      }
+    },
+    music: {
+      draggable: false,
+      icon: {
+        url: this.baseAppUrl + '/images/blue_dot.png'
+      }
+    },
+    watch: {
+      draggable: false,
+      icon: {
+        url: this.baseAppUrl + '/images/blue_dot.png'
+      }
+    },
+    website: {
+      draggable: false,
+      icon: {
+        url: this.baseAppUrl + '/images/blue_dot.png'
+      }
+    },
+  };
+  readonly polylineOptions = {geodesic: true, zIndex: 11, strokeColor: '#33BBFF', strokeOpacity: 1, strokeWeight: 6};
+  readonly polylineBorderOptions = {geodesic: true, zIndex: 10, strokeColor: '#FFFFFF', strokeOpacity: 1, strokeWeight: 8};
   readonly mapOptions = {
     panControl: false,
     zoomControl: false,
@@ -20,7 +57,7 @@ export class ConstantsService{
         elementType: 'geometry',
         stylers: [
           {
-            color: '#242f3e'
+            color: '#ebe3cd'
           }
         ]
       },
@@ -28,7 +65,7 @@ export class ConstantsService{
         elementType: 'labels.text.fill',
         stylers: [
           {
-            color: '#746855'
+            color: '#523735'
           }
         ]
       },
@@ -36,7 +73,7 @@ export class ConstantsService{
         elementType: 'labels.text.stroke',
         stylers: [
           {
-            color: '#242f3e'
+            color: '#f5f1e6'
           }
         ]
       },
@@ -50,11 +87,38 @@ export class ConstantsService{
         ]
       },
       {
-        featureType: 'administrative.locality',
+        featureType: 'administrative',
+        elementType: 'geometry.stroke',
+        stylers: [
+          {
+            color: '#c9b2a6'
+          }
+        ]
+      },
+      {
+        featureType: 'administrative.land_parcel',
+        elementType: 'geometry.stroke',
+        stylers: [
+          {
+            color: '#dcd2be'
+          }
+        ]
+      },
+      {
+        featureType: 'administrative.land_parcel',
         elementType: 'labels.text.fill',
         stylers: [
           {
-            color: '#d59563'
+            color: '#ae9e90'
+          }
+        ]
+      },
+      {
+        featureType: 'landscape.natural',
+        elementType: 'geometry',
+        stylers: [
+          {
+            color: '#dfd2ae'
           }
         ]
       },
@@ -68,19 +132,28 @@ export class ConstantsService{
       },
       {
         featureType: 'poi',
-        elementType: 'labels.text.fill',
-        stylers: [
-          {
-            color: '#d59563'
-          }
-        ]
-      },
-      {
-        featureType: 'poi.park',
         elementType: 'geometry',
         stylers: [
           {
-            color: '#263c3f'
+            color: '#dfd2ae'
+          }
+        ]
+      },
+      {
+        featureType: 'poi',
+        elementType: 'labels.text.fill',
+        stylers: [
+          {
+            color: '#93817c'
+          }
+        ]
+      },
+      {
+        featureType: 'poi.park',
+        elementType: 'geometry.fill',
+        stylers: [
+          {
+            color: '#a5b076'
           }
         ]
       },
@@ -89,7 +162,7 @@ export class ConstantsService{
         elementType: 'labels.text.fill',
         stylers: [
           {
-            color: '#6b9a76'
+            color: '#447530'
           }
         ]
       },
@@ -98,16 +171,7 @@ export class ConstantsService{
         elementType: 'geometry',
         stylers: [
           {
-            color: '#38414e'
-          }
-        ]
-      },
-      {
-        featureType: 'road',
-        elementType: 'geometry.stroke',
-        stylers: [
-          {
-            color: '#212a37'
+            color: '#f5f1e6'
           }
         ]
       },
@@ -121,11 +185,11 @@ export class ConstantsService{
         ]
       },
       {
-        featureType: 'road',
-        elementType: 'labels.text.fill',
+        featureType: 'road.arterial',
+        elementType: 'geometry',
         stylers: [
           {
-            color: '#9ca5b3'
+            color: '#fdfcf8'
           }
         ]
       },
@@ -134,7 +198,7 @@ export class ConstantsService{
         elementType: 'geometry',
         stylers: [
           {
-            color: '#746855'
+            color: '#f8c967'
           }
         ]
       },
@@ -143,16 +207,34 @@ export class ConstantsService{
         elementType: 'geometry.stroke',
         stylers: [
           {
-            color: '#1f2835'
+            color: '#e9bc62'
           }
         ]
       },
       {
-        featureType: 'road.highway',
+        featureType: 'road.highway.controlled_access',
+        elementType: 'geometry',
+        stylers: [
+          {
+            color: '#e98d58'
+          }
+        ]
+      },
+      {
+        featureType: 'road.highway.controlled_access',
+        elementType: 'geometry.stroke',
+        stylers: [
+          {
+            color: '#db8555'
+          }
+        ]
+      },
+      {
+        featureType: 'road.local',
         elementType: 'labels.text.fill',
         stylers: [
           {
-            color: '#f3d19c'
+            color: '#806b63'
           }
         ]
       },
@@ -165,29 +247,47 @@ export class ConstantsService{
         ]
       },
       {
-        featureType: 'transit',
+        featureType: 'transit.line',
         elementType: 'geometry',
         stylers: [
           {
-            color: '#2f3948'
+            color: '#dfd2ae'
+          }
+        ]
+      },
+      {
+        featureType: 'transit.line',
+        elementType: 'labels.text.fill',
+        stylers: [
+          {
+            color: '#8f7d77'
+          }
+        ]
+      },
+      {
+        featureType: 'transit.line',
+        elementType: 'labels.text.stroke',
+        stylers: [
+          {
+            color: '#ebe3cd'
           }
         ]
       },
       {
         featureType: 'transit.station',
-        elementType: 'labels.text.fill',
-        stylers: [
-          {
-            color: '#d59563'
-          }
-        ]
-      },
-      {
-        featureType: 'water',
         elementType: 'geometry',
         stylers: [
           {
-            color: '#17263c'
+            color: '#dfd2ae'
+          }
+        ]
+      },
+      {
+        featureType: 'water',
+        elementType: 'geometry.fill',
+        stylers: [
+          {
+            color: '#b9d3c2'
           }
         ]
       },
@@ -196,16 +296,7 @@ export class ConstantsService{
         elementType: 'labels.text.fill',
         stylers: [
           {
-            color: '#515c6d'
-          }
-        ]
-      },
-      {
-        featureType: 'water',
-        elementType: 'labels.text.stroke',
-        stylers: [
-          {
-            color: '#17263c'
+            color: '#92998d'
           }
         ]
       }
@@ -235,6 +326,13 @@ export class ConstantsService{
     const minutes = '0' + date.getMinutes();
 
     return hours + ':' + minutes.substr(-2);
+  }
+
+  formatDate(timestamp): string {
+    const date = new Date(timestamp * 1000);
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+    return date.toLocaleDateString('en-US', options);
   }
 
   formatDistance(meters): string {

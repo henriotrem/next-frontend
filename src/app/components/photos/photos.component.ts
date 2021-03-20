@@ -10,7 +10,7 @@ import {Source} from '../../models/Source.model';
 export class PhotosComponent implements OnInit {
 
   @Input() photos: Photo[];
-  @Input() source: Source;
+  @Input() context: any;
 
   gallery: any[] = [];
 
@@ -43,9 +43,6 @@ export class PhotosComponent implements OnInit {
     }
 
     this.gallery.push({height: baseHeight, photos});
-
-    console.log('GALLERY');
-    console.log(this.gallery);
   }
 
 }

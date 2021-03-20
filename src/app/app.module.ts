@@ -48,6 +48,7 @@ import { PhotosComponent } from './components/photos/photos.component';
 import { MusicsComponent } from './components/musics/musics.component';
 import { WatchesComponent } from './components/watches/watches.component';
 import { WebsitesComponent } from './components/websites/websites.component';
+// import {HotkeyModule} from 'angular2-hotkeys';
 
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent },
@@ -88,6 +89,7 @@ const appRoutes: Routes = [
     YouTubePlayerModule,
     ReactiveFormsModule,
     HttpClientModule,
+    // HotkeyModule.forRoot(),
     RouterModule.forRoot(appRoutes),
     NgbModule
   ],

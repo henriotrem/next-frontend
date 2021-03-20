@@ -1,23 +1,12 @@
 <div class="row">
   <div class="col-xs-12">
     <div class="container">
-      <button class="btn btn-default" (click)="onBack()">
-        Back
-      </button>
-      <button class="btn btn-default float-right" style="margin-left: 5px" (click)="onDeleteUniverse(universe)">
-        Delete
-      </button>
-      <button class="btn btn-primary float-right" (click)="onViewUniverse(universe)">
-        Details
-      </button>
-    </div>
-    <div class="container">
       <h3>#{{ universe.key }}</h3>
       <p>{{ universe.description }}</p>
-      <google-map *ngIf="connected"
+      <google-map
                   class="float-left"
-                  height="500px"
-                  width="700px"
+                  height="600px"
+                  width="1100px"
                   [options]="constantsService.mapOptions">
         <map-marker [position]="currentPosition"
                     [options]="currentPositionOptions"></map-marker>
@@ -25,46 +14,20 @@
                     [position]="markerPosition"
                     [options]="markerOptions"></map-marker>
       </google-map>
-      <div class="list-group float-right" id="elements" style="max-height: 500px; overflow:scroll;" (scroll)="onScroll($event)">
-        <button class="list-group-item" style="margin-bottom: 10px" *ngFor="let photo of photos" (click)="onViewPhoto(photo)">
-          <h4 class="list-group-item-heading">
-            {{ photo.title }}
-          </h4>
-          <h5 class="list-group-item-text">
-            {{ photo.author }}
-          </h5>
-          <p class="list-group-item-text" style="margin-top: 10px">
-            Geospatiality : [{{ photo.geospatiality }}]
-          </p>
-          <p class="list-group-item-text">
-            Temporality : {{ photo.temporality }}
-          </p>
-        </button>
-        <button class="list-group-item" style="margin-bottom: 10px" *ngFor="let position of positions">
-          <h4 class="list-group-item-heading">
-            {{ position._id }}
-          </h4>
-          <p class="list-group-item-text" style="margin-top: 10px">
-            Geospatiality : [{{ position.geospatiality }}]
-          </p>
-          <p class="list-group-item-text">
-            Temporality : {{ position.temporality * 1000 | date:'dd/MM/yyyy hh:mm:ss' }}
-          </p>
-        </button>
-      </div>
     </div>
     <div class="container">
+      <button class="btn btn-secondary" (click)="onResumeSearch()" >More</button>
       <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
         <button class="btn btn-primary" type="submit" [disabled]="searchForm.invalid">Search</button>
 
         <h3>General</h3>
 
         <div class="form-group">
-          <label>Loads</label>
+          <label>Calls</label>
           <input type="number" class="form-control"  formControlName="loads">
         </div>
         <div class="form-group">
-          <label>Step</label>
+          <label>Chunk</label>
           <input type="number" class="form-control"  formControlName="step">
         </div>
         <div formGroupName="geospatiality" class="from-group">

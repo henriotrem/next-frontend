@@ -1,15 +1,11 @@
-<div>
-
-  <google-map [options]="constantsService.mapOptions">
-    <map-marker *ngFor="let marker of markers"
-                [position]="marker"
-                [options]="markerOptions"></map-marker>
-    <map-polyline *ngFor="let border of polylineBorders"
-                  [path]="border"
-                  [options]="polylineBorderOptions"></map-polyline>
-    <map-polyline *ngFor="let polyline of polylines"
-                  [path]="polyline"
-                  [options]="polylineOptions"></map-polyline>
-  </google-map>
-
-</div>
+<google-map [options]="constantsService.mapOptions" width="100%" height="100%">
+  <map-marker *ngFor="let marker of markers"
+              [position]="marker.location"
+              [options]="marker.options"></map-marker>
+  <map-polyline *ngFor="let border of polylineBorders"
+                [path]="border"
+                [options]="constantsService.polylineBorderOptions"></map-polyline>
+  <map-polyline *ngFor="let polyline of polylines"
+                [path]="polyline"
+                [options]="constantsService.polylineOptions"></map-polyline>
+</google-map>

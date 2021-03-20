@@ -1,7 +1,7 @@
 <div class="row" >
-  <div *ngFor="let music of musics| slice:0:7; let i=index" style="margin-right: 10px" class="column">
+  <div *ngFor="let music of musics" style="margin-right: 10px" class="column">
     <p>
-      <img src="{{ music.albumUrl }}" height="150"/><br>
+      <img src="{{ music.albumUrl }}" height="150" width="150"/><br>
       <span class="text">{{ music.track }}</span>
       <span class="text">{{ music.artists }}</span>
     </p>

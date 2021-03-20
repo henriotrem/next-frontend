@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 import {Website} from '../../models/Website.model';
-import {Source} from '../../models/Source.model';
 
 @Component({
   selector: 'app-websites',
@@ -11,7 +10,7 @@ import {Source} from '../../models/Source.model';
 export class WebsitesComponent implements OnInit {
 
   @Input() websites: Website[];
-  @Input() source: Source;
+  @Input() context: any;
 
   constructor() { }
 

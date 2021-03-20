@@ -1,12 +1,13 @@
-export class Source {
+export class Provider {
   _id: string;
-  providerId: string;
   label: string;
   name: string;
   type: string;
   description: string;
   endpoint: string;
-  scope: string[];
+  clientSecret: string;
+  clientId: string;
+  callbackUrl: string;
   createdAt: Date;
 
   constructor() {}

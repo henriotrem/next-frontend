@@ -17,8 +17,8 @@ export class ExternalService {
   constructor(private constantsService: ConstantsService,
               private http: HttpClient) {}
 
-  getExternalData(source: Source, params: any): any {
-    return this.http.get(this.constantsService.baseAppUrl + '/api/external/' + source.provider + '/data'
+  getExternalData(params: any): any {
+    return this.http.get(this.constantsService.baseAppUrl + '/api/external/data'
       + this.constantsService.formatQuery(params))
       .pipe(
         map((result: any) => {
@@ -44,8 +44,8 @@ export class ExternalService {
       );
   }
 
-  getExternalContext(source: Source, params: any): any {
-    return this.http.get(this.constantsService.baseAppUrl + '/api/external/' + source.provider + '/context'
+  getExternalContext(params: any): any {
+    return this.http.get(this.constantsService.baseAppUrl + '/api/external/context'
       + this.constantsService.formatQuery(params));
   }
 }

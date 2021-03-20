@@ -8,6 +8,11 @@ import {Component, Input, OnInit} from '@angular/core';
 export class YoutubeComponent implements OnInit {
 
   @Input() videoId: string;
+  playerVars = {
+    enablejsapi: 1,
+    origin: 'http://localhost:4200'
+  };
+
   constructor() { }
 
   ngOnInit(): void {

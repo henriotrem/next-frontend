@@ -16,12 +16,12 @@ export class UniversesService {
     return this.http.post(this.constantsService.baseAppUrl + '/api/universes', universe);
   }
 
-  getUniverses(): any {
-    return this.http.get(this.constantsService.baseAppUrl + '/api/universes');
+  getUniverse(key): any {
+    return this.http.get(this.constantsService.baseAppUrl + '/api/universes/' + key);
   }
 
-  getUniverse(key: string): any {
-    return this.http.get(this.constantsService.baseAppUrl + '/api/universes/' + key);
+  getUniverses(): any {
+    return this.http.get(this.constantsService.baseAppUrl + '/api/universes');
   }
 
   removeUniverse(universe: Universe): any {

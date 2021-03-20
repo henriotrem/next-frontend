@@ -77,8 +77,8 @@ export class WatchesService extends ItemsService {
     const temporality = (new Date(Date.parse(obj.time))).getTime() / 1000;
     const watch = new Watch();
 
-    watch.sourceUrl = obj.title;
-    watch.title = obj.titleUrl;
+    watch.title = obj.title;
+    watch.sourceUrl = obj.titleUrl;
     watch.temporality = temporality;
 
     return watch;

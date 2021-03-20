@@ -1,18 +1,23 @@
-<div class="row">
-  <div class="col-xs-12">
-    <div class="container">
-      <h2>Timeline</h2>
-      <button class="btn btn-primary" (click)="onPreviousDay()">Previous</button>
-      <button class="btn btn-primary" style="margin-left: 10px" (click)="onNextDay()">Next</button>
-    </div>
+<div (mousemove)="captureCoordinate($event)">
+  <div id="timeline" [style.opacity]="timelineOpacity" [style.z-index]="timelineZIndex">
+    <h3>{{ constantsService.formatDate(timestamp) }}</h3>
     <div *ngFor="let activity of activities">
-      <app-segment [segment]="activity.segment"></app-segment>
+      <app-segment *ngIf="activity.contents.length > 0" [segment]="activity.segment" [context]="getContext('location')"></app-segment>
       <div *ngFor="let content of activity.contents" class="float-left container" style="margin-bottom: 10px">
-        <app-photos *ngIf="content.type === 'Photo'" [source]="getContextSource('photo')" [photos]="content.data"></app-photos>
-        <app-musics *ngIf="content.type === 'Music'" [source]="getContextSource('music')" [musics]="content.data"></app-musics>
-        <app-watches *ngIf="content.type === 'Watch'" [source]="getContextSource('watch')" [watches]="content.data"></app-watches>
-        <app-websites *ngIf="content.type === 'Website'" [source]="getContextSource('website')" [websites]="content.data"></app-websites>
+        <app-photos *ngIf="content.type === 'Photo'" [context]="getContext('photo')" [photos]="content.data"></app-photos>
+        <app-musics *ngIf="content.type === 'Music'" [context]="getContext('music')" [musics]="content.data"></app-musics>
+        <app-watches *ngIf="content.type === 'Watch'" [context]="getContext('watch')" [watches]="content.data"></app-watches>
+        <app-websites *ngIf="content.type === 'Website'" [context]="getContext('website')" [websites]="content.data"></app-websites>
       </div>
     </div>
+  </div>
+  <div id="map" *ngIf="activities.length > 0" [style.opacity]="mapOpacity" [style.z-index]="mapZIndex">
+    <app-map [activities]="activities" ></app-map>
+  </div>
+  <div id="menu" [style.opacity]="menuOpacity">
+    <button class="btn btn-dark" (click)="onPreviousDay()"><</button>
+    <button class="btn btn-dark">-</button>
+    <button class="btn btn-dark">+</button>
+    <button class="btn btn-dark" (click)="onNextDay()">></button>
   </div>
 </div>

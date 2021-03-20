@@ -11,17 +11,22 @@ import {ExternalService} from '../../services/external.service';
 export class MusicsComponent implements OnInit {
 
   @Input() musics: Music[];
-  @Input() source: Source;
+  @Input() context: any;
 
   constructor(private externalService: ExternalService) { }
 
   ngOnInit(): void {
 
     for (const music of this.musics) {
-      const params = {track: music.track, artist: music.artists[0]};
-      this.externalService.getExternalContext(this.source, params)
+      const params = {
+        sourceId: this.context.source._id,
+        apiId: this.context.api._id,
+        track: music.track,
+        artist: music.artists[0]
+      };
+      this.externalService.getExternalContext(params)
         .subscribe((result: any) => {
-          music.albumUrl = result.tracks.items[0].album.images[0].url;
+          music.albumUrl = result.tracks[0].album.images[0].url;
         });
     }
   }

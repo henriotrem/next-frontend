@@ -1,17 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Segment} from '../../models/Segment.model';
-import {SegmentsService} from '../../services/segments.service';
 import {ConstantsService} from '../../services/constants.service';
-import {Photo} from '../../models/Photo.model';
-import {MusicsService} from '../../services/musics.service';
-import {Music} from '../../models/Music.model';
-import {Watch} from '../../models/Watch.model';
-import {WatchesService} from '../../services/watches.service';
 import {ExternalService} from '../../services/external.service';
-import {Website} from '../../models/Website.model';
-import {WebsitesService} from '../../services/websites.service';
-import {PhotosService} from '../../services/photos.service';
-import {Source} from '../../models/Source.model';
 
 @Component({
   selector: 'app-segment',
@@ -21,9 +11,25 @@ import {Source} from '../../models/Source.model';
 export class SegmentComponent implements OnInit {
 
   @Input() segment: Segment;
+  @Input() context: any;
+  address: string;
+  imageUrl: string;
 
-  constructor(public constantsService: ConstantsService) { }
+  constructor(private externalService: ExternalService,
+              public constantsService: ConstantsService) { }
 
   ngOnInit(): void {
+    if (this.segment.distance === 0) {
+
+      const params = {
+        sourceId: this.context.source._id,
+        apiId: this.context.api._id,
+        location: this.segment.location.latitude + ',' + this.segment.location.longitude
+      };
+      this.externalService.getExternalContext(params)
+        .subscribe((result) => {
+          this.address = result.locations[0].vicinity;
+        });
+    }
   }
 }

@@ -74,9 +74,9 @@ export class AccountComponent implements OnInit, OnDestroy {
   onNewGoogleMapsHistory(): void {
     const source = new Source();
 
-    source.name = 'Google Maps History';
+    source.label = 'Google Maps History';
+    source.name = 'google-maps-history';
     source.type = 'location-file';
-    source.provider = 'google-maps';
 
     this.sourcesService.addSources([source]).subscribe(
       (result) => {
@@ -92,9 +92,10 @@ export class AccountComponent implements OnInit, OnDestroy {
   onNewGooglePlacesAPI(): void {
     const source = new Source();
 
-    source.name = 'Google Places API';
-    source.type = 'location-api-context';
-    source.provider = 'google-places';
+    source.label = 'Google Places API';
+    source.name = 'google-places-api';
+    source.type = 'location-api-context-oauth2';
+    source.endpoint = 'https://maps.googleapis.com';
 
     this.sourcesService.addSources([source]).subscribe(
       (result) => {
@@ -110,9 +111,14 @@ export class AccountComponent implements OnInit, OnDestroy {
   onNewGooglePhotoAPI(): void {
     const source = new Source();
 
-    source.name = 'Google Photo API';
+    source.label = 'Google Photos API';
+    source.name = 'google-photos-api';
     source.type = 'photo-api-data-oauth2';
-    source.provider = 'google';
+    source.endpoint = 'https://photoslibrary.googleapis.com';
+    source.scope = [
+      'https://www.googleapis.com/auth/photoslibrary.readonly',
+      'https://www.googleapis.com/auth/userinfo.email'
+    ];
 
     this.sourcesService.addSources([source]).subscribe(
       (result) => {
@@ -128,9 +134,9 @@ export class AccountComponent implements OnInit, OnDestroy {
   onNewSpotifyHistory(): void {
     const source = new Source();
 
-    source.name = 'Spotify History';
+    source.label = 'Spotify History';
+    source.name = 'spotify-history';
     source.type = 'music-file';
-    source.provider = 'spotify';
 
     this.sourcesService.addSources([source]).subscribe(
       (result) => {
@@ -146,9 +152,14 @@ export class AccountComponent implements OnInit, OnDestroy {
   onNewSpotifyAPI(): void {
     const source = new Source();
 
-    source.name = 'Spotify API';
+    source.label = 'Spotify API';
+    source.name = 'spotify-api';
     source.type = 'music-api-context-oauth2';
-    source.provider = 'spotify';
+    source.endpoint = 'https://api.spotify.com';
+    source.scope = [
+      'user-read-email',
+      'user-read-private'
+    ];
 
     this.sourcesService.addSources([source]).subscribe(
       (result) => {
@@ -164,9 +175,9 @@ export class AccountComponent implements OnInit, OnDestroy {
   onNewYoutubeHistory(): void {
     const source = new Source();
 
-    source.name = 'Youtube History';
+    source.label = 'Youtube History';
+    source.name = 'youtube-history';
     source.type = 'watch-file';
-    source.provider = 'youtube';
 
     this.sourcesService.addSources([source]).subscribe(
       (result) => {

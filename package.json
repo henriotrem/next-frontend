@@ -23,6 +23,7 @@
     "@angular/router": "~10.0.9",
     "@angular/youtube-player": "^11.0.1",
     "@ng-bootstrap/ng-bootstrap": "^8.0.0",
+    "angular2-hotkeys": "^2.2.0",
     "bootstrap": "^4.5.3",
     "crypto-js": "^4.0.0",
     "file-saver": "^2.0.2",
